@@ -1,0 +1,29 @@
+1. Open app/Providers/RouteServiceProvider.php
+    - Modify protected $namespace path to ‘App\Http\Controllers\FrontControllers’
+    - add codes in the function “mapWebRoutes”
+
+2.
+protected function mapWebRoutes()
+{
+    $appScope = config('app.app_scope');
+
+    if ($appScope == 'admin') {
+        $this->namespace = 'App\Http\Controllers\AdminControllers';
+    }
+
+    Route::middleware('web')
+    ->namespace($this->namespace)
+    ->group(base_path('routes/web.php'));
+}
+
+3. Routes/web.php
+
+Route::get('test', 'PageController@initContent');
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('dashboard', 'DashboardController@initContent');
+});
+
+4. create controller
+php artisan make:controller FrontControllers/PageController
+php artisan make:controller AdminControllers/DashboardController
